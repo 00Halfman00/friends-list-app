@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const { STRING } = Sequelize;
-const conn = new Sequelize('postgres://localhost/friends-list');
+const dbURL = process.env.DATABASE_URL || 'postgres://localhost/friends-list'
+const conn = new Sequelize(dbURL);
 //const faker = require('faker');
 
 const Friend = conn.define( 'friend', {
