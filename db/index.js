@@ -1,28 +1,31 @@
 const Sequelize = require('sequelize');
 const { STRING } = Sequelize;
 const conn = new Sequelize('postgres://localhost/friends-list');
-const faker = require('faker');
+//const faker = require('faker');
 
-const Friend = db.define( 'friend', {
+const Friend = conn.define( 'friend', {
     name: {
         type: STRING
     }
 });
+const Buddies = [
+    { name: 'Moe'},
+    { name: 'Larry' },
+    { name: 'Curly'}
+];
 
-
-const syncAndSeed = aync () => {
-    await conn.sync( { force : true });
-    const fakes = [];
-    while(fakes.length < 3) {
-        fakes.push(
-            Friend.create({ name: faker.name.firstName() })
-        )
+const syncAndSeed = async() => {
+    try {
+        await conn.sync( { force : true } );
+        await Friend.bulkCreate(Buddies);
+    } catch (err) {
+        console.error(err);
     }
 };
 
 
 module.exports = {
     syncAndSeed,
-    Friend
+    models: { Friend }
 }
 

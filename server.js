@@ -3,15 +3,20 @@ const morgan = require('morgan');
 const path = require('path');
 const bodyParser = require('body-parser');
 const db = require('./db');
-const { nextTick } = require('process');
+const { Friend } = db.models;
+// const { nextTick } = require('process');
 const app = express();
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
-app.use('/', async (req, res, next) => {
+app.use( '/', express.static(path.join(__dirname, 'public')));
+
+app.use('/friends', async (req, res, next) => {
     try {
-        
+        console.log(Friend)
+        const friends = await Friend.findAll();
+        res.send(friends)
     } catch( err ) {
         next(err);
     }
